@@ -7,7 +7,7 @@ if __name__ == "__main__":
     window = GameWindow()
     sudoku = Sudoku(window)
     sudoku.board_generator()
-    while True:
+    while not sudoku.is_over():
         sudoku.draw()
         pygame.display.update()
         for event in pygame.event.get():

@@ -33,6 +33,38 @@ class Sudoku:
             pygame.draw.line(self.window.surface, (20, 20, 20), [x, 0], [x, self.window.size], line_w)
             pygame.draw.line(self.window.surface, (20, 20, 20), [0, y], [self.window.size, y], line_w)
 
+    def is_over(self):
+        # check if board is full
+        for row in self.board:
+            for field in row:
+                if field.get_digit() is None:
+                    return False
+        # iter rows
+        for row in self.board:
+            if not len(row) == len(set(row)):
+                return False
+        # iter cols
+        for i in range(9):
+            digits = set()
+            for j in range(9):
+                if self.board[j][i].get_digit() in digits:
+                    return False
+                else:
+                    digits.add(self.board[j][i].get_digit())
+        # iter squares
+        dir_x = [0, 0, 0, 1, 1, 1, 2, 2, 2]
+        dir_y = [0, 1, 2, 0, 1, 2, 0, 1, 2]
+        for i in range(3):
+            for j in range(3):
+                digits = set()
+                for dx, dy in zip(dir_x, dir_y):
+                    if self.board[i * 3 + dy][j * 3 + dx].get_digit() in digits:
+                        return False
+                    else:
+                        digits.add(self.board[i * 3 + dy][j * 3 + dx].get_digit())
+        # sudoku is solved
+        return True
+
     def click(self, mouse_pos):
         for row in self.board:
             for field in row:
